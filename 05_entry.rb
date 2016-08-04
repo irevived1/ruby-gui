@@ -16,6 +16,21 @@ Tk::Tile::Label.new(content) {text 'Parsley'}.grid( :column => 1, :row => 2 )
 Tk::Tile::Label.new(content) {text 'Onion'}.grid( :column => 2, :row => 1  )
 Tk::Tile::Label.new(content) {text 'Lettuce'}.grid( :column => 2, :row => 2  )
 
+
+$feet = TkVariable.new; $meters = TkVariable.new
+f = Tk::Tile::Entry.new(content) {width 7; textvariable $feet}.grid( :column => 2, :row => 1, :sticky => 'we' )
+Tk::Tile::Label.new(content) {textvariable $meters}.grid( :column => 2, :row => 2, :sticky => 'we');
+Tk::Tile::Button.new(content) {text 'Calculate'; command {calculate}}.grid( :column => 3, :row => 3, :sticky => 'w')
+f.focus
+root.bind("Return") {calculate}
+
+def calculate
+	begin
+		$meters.value = (0.3048*$feet*10000.0).round()/10000.0
+	rescue
+		$meters.value = ''
+	end
+end
 #adding padding to each child/tile
 TkWinfo.children(content).each {|w| TkGrid.configure w, :padx => 50, :pady => 50}
 
